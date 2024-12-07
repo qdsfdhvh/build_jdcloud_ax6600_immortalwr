@@ -48,7 +48,7 @@ jobs:
           sudo -E apt-get -yqq autoremove --purge
           sudo -E apt-get -yqq autoclean
           sudo -E apt-get -yqq clean
-          sudo -E apt-get -yqq install libncurses-dev
+          sudo apt -y install dos2unix libncurses-dev
           curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh | sudo bash
           sudo -E systemctl daemon-reload
           sudo -E timedatectl set-timezone "Asia/Shanghai"
@@ -60,6 +60,10 @@ jobs:
 
           echo "WRT_DATE=$WRT_DATE" >> $GITHUB_ENV
           echo "WRT_CI=$WRT_CI" >> $GITHUB_ENV
+      
+      - name: Check Scripts
+        run: |
+          find ./ -maxdepth 3 -type f -iregex ".*\(txt\|sh\)$" -exec dos2unix {} \; -exec chmod +x {} \;
 
       - name: Build Immortalwrt
         run: |
