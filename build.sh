@@ -2,10 +2,6 @@ ROOT_DIR=$PWD
 LOG_FILE=$ROOT_DIR/build.log
 rm -f $LOG_FILE
 
-# 确保管道中的错误能被捕获
-set -e
-set -o pipefail
-
 if [ ! -d "immortalwrt" ]; then
     echo "Cloning immortalwrt..."
     git clone https://github.com/VIKINGYFY/immortalwrt --single-branch --depth 1 || {
