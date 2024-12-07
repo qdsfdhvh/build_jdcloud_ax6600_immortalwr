@@ -20,10 +20,11 @@ jobs:
         run: |
           sudo apt update -y
           sudo apt full-upgrade -y
-          sudo apt install -y build-essential subversion libncurses5-dev zlib1g-dev gawk gcc-multilib flex git-core gettext libssl-dev unzip python wget time rsync sudo
+          sudo apt install -y build-essential subversion libncurses5-dev zlib1g-dev gawk gcc-multilib flex git-core gettext libssl-dev unzip python3 wget time rsync sudo
 
-      - name: Build curl
+      - name: Build Immortalwrt
         run: |
+          chmod +x build.sh
           sh build.sh
 
       # - name: Upload .bin files
