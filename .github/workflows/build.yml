@@ -18,10 +18,9 @@ jobs:
       
       - name: Install dependencies
         run: |
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
-          sudo -E apt-get -qq autoremove --purge
-          sudo -E apt-get -qq clean
+          sudo apt update -y
+          sudo apt full-upgrade -y
+          sudo apt install -y build-essential subversion libncurses5-dev zlib1g-dev gawk gcc-multilib flex git-core gettext libssl-dev unzip python wget time rsync sudo
 
       - name: Build curl
         run: |

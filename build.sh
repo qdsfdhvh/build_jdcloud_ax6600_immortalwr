@@ -1,5 +1,5 @@
 if [ ! -d "immortalwrt" ]; then
-    git clone git@github.com:VIKINGYFY/immortalwrt.git --single-branch --depth 1 || exit 1
+    git clone https://github.com/VIKINGYFY/immortalwrt --single-branch --depth 1 || exit 1
 fi
 
 cp -f ax6600.config immortalwrt/.config
