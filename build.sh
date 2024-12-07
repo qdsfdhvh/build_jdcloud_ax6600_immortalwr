@@ -17,6 +17,6 @@ cd immortalwrt
 ./scripts/feeds install -a
 
 make clean
-make download V=s 2>&1 | tee "$LOG_FILE"
-make -j "$(nproc)" V=s 2>&1 | tee "$LOG_FILE"
+make download -j$(nproc) 2>&1 | tee "$LOG_FILE"
+make -j$(nproc) V=s 2>&1 | tee "$LOG_FILE"
 echo "Build Done!"
