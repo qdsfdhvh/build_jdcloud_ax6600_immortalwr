@@ -28,10 +28,16 @@ jobs:
         run: |
           chmod +x build.sh
           sh build.sh
+      
+      - name: Upload build.log
+        uses: actions/upload-artifact@v4
+        with:
+          path: build.log
 
-      # - name: Upload .bin files
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: curl-android
-      #     path: |
-      #       **/.bin
+      - name: Upload .bin files
+        uses: actions/upload-artifact@v4
+        with:
+          name: JDCloud-AX6600-Immortalwrt
+          path: |
+            bin/targets/**/*/.ubi
+            bin/targets/**/*/.bin
