@@ -39,17 +39,17 @@ jobs:
             /usr/share/azure* /usr/share/dotnet* /usr/share/glade* /usr/share/miniconda* /usr/share/php* /usr/share/swift \
             /var/lib/mysql* /var/log/azure*"
 
-      - name: Initialization Environment
+      - name: ⚙️ Initialization Environment
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo -E apt -yqq update
-          sudo -E apt -yqq full-upgrade
-          sudo -E apt -yqq autoremove --purge
-          sudo -E apt -yqq autoclean
-          sudo -E apt -yqq clean
-          sudo -E apt -yqq install dos2unix
-          sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
+          sudo -E apt-get -yqq update
+          sudo -E apt-get -yqq full-upgrade
+          sudo -E apt-get -yqq autoremove --purge
+          sudo -E apt-get -yqq autoclean
+          sudo -E apt-get -yqq clean
+          sudo -E apt-get -yqq install dos2unix
+          curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh | sudo bash
           sudo -E systemctl daemon-reload
           sudo -E timedatectl set-timezone "Asia/Shanghai"
       
