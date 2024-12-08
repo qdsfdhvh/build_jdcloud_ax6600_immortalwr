@@ -3,6 +3,15 @@ CONFIG_TARGET_qualcommax=y
 CONFIG_TARGET_qualcommax_ipq60xx=y
 # 设备列表
 CONFIG_TARGET_qualcommax_ipq60xx_DEVICE_jdcloud_re-cs-02=y
+# 开启 nss 网络加速
+CONFIG_PER_FEED_REPO=y
+CONFIG_FEED_nss_packages=y
+CONFIG_FEED_sqm_scripts_nss=y
+CONFIG_FEED_packages=y
+CONFIG_FEED_luci=y
+CONFIG_FEED_routing=y
+CONFIG_FEED_telephony=y
+CONFIG_FEED_video=y
 # 
 CONFIG_MODULES=y
 CONFIG_HAVE_DOT_CONFIG=y

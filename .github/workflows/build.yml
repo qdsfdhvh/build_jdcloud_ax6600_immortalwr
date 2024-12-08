@@ -11,17 +11,15 @@ on:
   workflow_dispatch:
 
 env:
-  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   WRT_TARGET: JDCLOUD-AX6600
   WRT_THEME: argon
   WRT_NAME: jdcloud-ax6600
   WRT_SSID: JDCwifi
   WRT_WORD: 12345678
   WRT_IP: 192.168.10.1
-  WRT_PW:
   WRT_REPO: https://github.com/VIKINGYFY/immortalwrt.git
   WRT_BRANCH: main
-  WRT_PACKAGE:
 
 jobs:
   build:
@@ -72,12 +70,10 @@ jobs:
           export WRT_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
           export WRT_CI=$(basename $GITHUB_WORKSPACE)
           export WRT_VER=$(echo $WRT_REPO | cut -d '/' -f 5-)-$WRT_BRANCH
-          export WRT_TYPE=$(sed -n "1{s/^#//;s/\r$//;p;q}" $GITHUB_WORKSPACE/Config/$WRT_TARGET.txt)
 
           echo "WRT_DATE=$WRT_DATE" >> $GITHUB_ENV
           echo "WRT_CI=$WRT_CI" >> $GITHUB_ENV
           echo "WRT_VER=$WRT_VER" >> $GITHUB_ENV
-          echo "WRT_TYPE=$WRT_TYPE" >> $GITHUB_ENV
 
       - name: Clone Code
         run: |
@@ -183,26 +179,24 @@ jobs:
           done
 
           find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
-          
 
-      - name: Release Firmware
-        uses: softprops/action-gh-release@master
+      - name: Upload Firmware
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{env.WRT_TARGET}}_${{env.WRT_VER}}_${{env.WRT_DATE}}
-          files: ./wrt/upload/*.*
-          body: |
-            这是个平台固件包，内含多个设备！
-            请注意选择你需要的设备固件！
-            不要问，刷就完事了！
+          name: ${{env.WRT_TARGET}}_${{env.WRT_VER}}_${{env.WRT_DATE}}
+          path: ./wrt/upload/*.*
+          # body: |
+          #   这是个平台固件包，内含多个设备！
+          #   请注意选择你需要的设备固件！
+          #   不要问，刷就完事了！
 
-            全系带开源硬件加速，别问了！
+          #   全系带开源硬件加速，别问了！
 
-            WIFI名称：${{env.WRT_SSID}}
-            WIFI密码：${{env.WRT_WORD}}
+          #   WIFI名称：${{ env.WRT_SSID }}
+          #   WIFI密码：${{ env.WRT_WORD }}
 
-            源码：${{env.WRT_REPO}}
-            分支：${{env.WRT_BRANCH}}
-            平台：${{env.WRT_TARGET}}
-            设备：${{env.WRT_TYPE}}
-            地址：${{env.WRT_IP}}
-            密码：${{env.WRT_PW}}
+          #   源码：${{ env.WRT_REPO }}
+          #   分支：${{ env.WRT_BRANCH }}
+          #   平台：${{ env.WRT_TARGET }}
+          #   地址：${{ env.WRT_IP }}
+          #   密码：无
