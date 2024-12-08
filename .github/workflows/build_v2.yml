@@ -11,7 +11,6 @@ on:
   workflow_dispatch:
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   WRT_TARGET: JDCLOUD-AX6600
   WRT_THEME: argon
   WRT_NAME: jdcloud-ax6600
@@ -116,6 +115,5 @@ jobs:
         with:
           name: ${{env.WRT_TARGET}}_${{env.WRT_VER}}_${{env.WRT_DATE}}
           path: |
-            ./wrt/.config
-            ./wrt/bin/targets/**/*.ubi
-            ./wrt/bin/targets/**/*.bin
+            wrt/.config
+            wrt/bin/targets/**
