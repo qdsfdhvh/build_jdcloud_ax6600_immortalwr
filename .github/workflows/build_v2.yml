@@ -2,8 +2,8 @@ name: Build CI v2
 
 on:
   push:
-    # branches:
-    #   - main
+    branches:
+      - main
     tags:
       - "v*"
     paths-ignore:
@@ -28,92 +28,14 @@ jobs:
       - name: Checkout Projects
         uses: actions/checkout@main
 
-      - name: Initialization Environment
-        env:
-          DEBIAN_FRONTEND: noninteractive
+      - name: Build Firmware
         run: |
-          sudo apt -y update
-          sudo apt -y full-upgrade
-          sudo apt -y autoremove --purge
-          sudo apt -y autoclean
-          sudo apt -y clean
-          sudo apt -y install dos2unix
-          sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
-
-      - name: Initialization Values
-        run: |
-          export WRT_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
-          export WRT_CI=$(basename $GITHUB_WORKSPACE)
-          export WRT_VER=$(echo $WRT_REPO | cut -d '/' -f 5-)-$WRT_BRANCH
-
-          echo "WRT_DATE=$WRT_DATE" >> $GITHUB_ENV
-          echo "WRT_CI=$WRT_CI" >> $GITHUB_ENV
-          echo "WRT_VER=$WRT_VER" >> $GITHUB_ENV
-
-      - name: Clone Code
-        run: |
-          git clone --depth=1 --single-branch --branch $WRT_BRANCH $WRT_REPO ./wrt/
-
-          cd ./wrt/ && echo "WRT_HASH=$(git log -1 --pretty=format:'%h')" >> $GITHUB_ENV
-
-      - name: Check Scripts
-        run: |
-          find ./ -maxdepth 3 -type f -iregex ".*\(txt\|sh\)$" -exec dos2unix {} \; -exec chmod +x {} \;
-
-      - name: Update Feeds
-        run: |
-          cd ./wrt/
-
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
-
-      - name: Custom Packages
-        run: |
-          cd ./wrt/package/
-
-          $GITHUB_WORKSPACE/Scripts/Packages.sh
-          $GITHUB_WORKSPACE/Scripts/Handles.sh
-
-      - name: Custom Settings
-        run: |
-          cd ./wrt/
-
-          rm -rf ./tmp* ./.config*
-
-          cat $GITHUB_WORKSPACE/Config/$WRT_TARGET.txt $GITHUB_WORKSPACE/Config/GENERAL.txt >> .config
-
-          $GITHUB_WORKSPACE/Scripts/Settings.sh
-
-          make defconfig -j$(nproc)
-
-      - name: Download Packages
-        run: |
-          cd ./wrt/
-
-          make download -j$(nproc)
-
-      - name: Compile Firmware
-        run: |
-          cd ./wrt/
-
-          make -j$(nproc) || make -j1 V=s
-
-      - name: Machine Information
-        run: |
-          cd ./wrt/
-
-          echo "======================="
-          lscpu | grep -E "name|Core|Thread"
-          echo "======================="
-          df -h
-          echo "======================="
-          du -h --max-depth=1
-          echo "======================="
+          sudo sh build.sh
 
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
         with:
-          name: ${{env.WRT_TARGET}}_${{env.WRT_VER}}_${{env.WRT_DATE}}
+          name: jdcloud-ax6600-immortalwrt
           path: |
             wrt/.config
             wrt/bin/targets/**

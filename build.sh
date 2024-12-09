@@ -19,7 +19,7 @@ cd wrt/
 ./scripts/feeds install -a
 
 cp -f $ROOT_DIR/ax6600.config .config
-make defconfig
+# make defconfig
 
 make download -j$(nproc) 2>&1 | tee "$LOG_FILE"
 make -j$(nproc) V=s 2>&1 | tee "$LOG_FILE"
