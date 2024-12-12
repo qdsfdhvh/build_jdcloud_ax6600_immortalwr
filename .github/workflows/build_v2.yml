@@ -10,16 +10,6 @@ on:
       - "README.md"
   workflow_dispatch:
 
-env:
-  WRT_TARGET: JDCLOUD-AX6600
-  WRT_THEME: argon
-  WRT_NAME: jdcloud-ax6600
-  WRT_SSID: JDCwifi
-  WRT_WORD: 12345678
-  WRT_IP: 192.168.10.1
-  WRT_REPO: https://github.com/VIKINGYFY/immortalwrt.git
-  WRT_BRANCH: main
-
 jobs:
   build:
     name: Build JDCloud-AX6600 Immortalwrt
@@ -28,9 +18,13 @@ jobs:
       - name: Checkout Projects
         uses: actions/checkout@main
 
-      - name: Build Firmware
+      - name: Print Build OS Env
         run: |
-          sudo sh build.sh
+          echo "Build Env: ${{ runner.os }} ${{ runner.os_version }} ${{ runner.arch }} ${{ runner.tool_cache }}"
+          echo "Build Env: ${{ runner.path }} ${{ runner.temp }} ${{ runner.workspace }}"
+
+      - name: Build Firmware
+        run: sh build.sh
 
       - name: Upload build.log
         uses: actions/upload-artifact@v4

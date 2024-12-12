@@ -29,9 +29,6 @@ cp -f $ROOT_DIR/ax6600.config .config
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
-# 设置环境变量以绕过 configure 检查
-export FORCE_UNSAFE_CONFIGURE=1
-
 # 下载和编译
 make download -j$(nproc) 2>&1 | tee "$LOG_FILE"
 make -j$(nproc) V=s 2>&1 | tee "$LOG_FILE"
