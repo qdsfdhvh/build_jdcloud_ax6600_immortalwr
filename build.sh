@@ -1,44 +1,13 @@
-sudo apt -y update
-sudo apt -y install git curl wget\
-    build-essential \
-    asciidoc \
-    binutils \
-    bzip2 \
-    gawk \
-    gettext \
-    libncurses5-dev \
-    libz-dev \
-    patch \
-    python3 \
-    unzip \
-    zlib1g-dev \
-    lib32gcc-s1 \
-    libc6-dev-i386 \
-    subversion \
-    flex \
-    uglifyjs \
-    gcc-multilib \
-    p7zip-full\
-    msmtp \
-    libssl-dev \
-    texinfo \
-    libglib2.0-dev \
-    xmlto \
-    qemu-utils \
-    upx \
-    libelf-dev \
-    autoconf \
-    automake \
-    libtool \
-    autopoint\
-    device-tree-compiler \
-    g++-multilib \
-    antlr3 \
-    gperf \
-    swig \
-    rsync \
-    genisoimage
+#!/bin/bash
+
+# 初始化构建环境
 sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
+
+# 更新并安装依赖 https://openwrt.org/docs/guide-developer/toolchain/install-buildsystem#debianubuntumint
+sudo apt update
+sudo apt install build-essential clang flex bison g++ gawk \
+    gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev \
+    python3-setuptools rsync swig unzip zlib1g-dev file wget
 
 ROOT_DIR=$PWD
 LOG_FILE=$ROOT_DIR/build.log
@@ -53,13 +22,16 @@ if [ ! -d "wrt/" ]; then
 fi
 cd wrt/
 
+# 复制配置文件
+cp -f $ROOT_DIR/ax6600.config .config
+
+# 更新并安装 feeds
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
-cp -f $ROOT_DIR/ax6600.config .config
-# make defconfig
+# 设置环境变量以绕过 configure 检查
+export FORCE_UNSAFE_CONFIGURE=1
 
+# 下载和编译
 make download -j$(nproc) 2>&1 | tee "$LOG_FILE"
 make -j$(nproc) V=s 2>&1 | tee "$LOG_FILE"
-
-echo "Build Done!"
