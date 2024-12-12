@@ -32,11 +32,16 @@ jobs:
         run: |
           sudo sh build.sh
 
+      - name: Upload build.log
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
+
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
         with:
           name: jdcloud-ax6600-immortalwrt
           path: |
-            wrt/.config
             wrt/bin/targets/**
           if-no-files-found: error
