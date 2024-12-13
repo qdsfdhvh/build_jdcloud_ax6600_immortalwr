@@ -28,7 +28,8 @@ fi
 cd wrt/
 
 # 复制配置文件
-cp -f $ROOT_DIR/ax6600.config .config
+# cp -f $ROOT_DIR/ax6600.config .config
+cp -f "$ROOT_DIR/Config_IPQ60XX-WIFI-YES_immortalwrt.git-main_24.12.12_04.25.49.txt" .config
 
 # 更新并安装 feeds
 ./scripts/feeds update -a
