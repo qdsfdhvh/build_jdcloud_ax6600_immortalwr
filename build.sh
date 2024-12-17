@@ -35,6 +35,12 @@ cp -f "$ROOT_DIR/Config_IPQ60XX-WIFI-YES_immortalwrt.git-main_24.12.12_04.25.49.
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
+# 安装自定义软件包
+cd package/
+$ROOT_DIR/Scripts/Packages.sh
+$ROOT_DIR/Scripts/Handles.sh
+cd ..
+
 # 下载和编译
 make download -j$(nproc) 2>&1 | tee "$LOG_FILE"
 make -j1 V=s 2>&1 | tee "$LOG_FILE"
