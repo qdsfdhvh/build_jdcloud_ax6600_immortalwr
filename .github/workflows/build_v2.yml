@@ -77,6 +77,11 @@ jobs:
 
           cd ./wrt/ && echo "WRT_HASH=$(git log -1 --pretty=format:'%h')" >> $GITHUB_ENV
 
+      - name: Copy .config
+        run: |
+          cd ./wrt/
+          cp -f $GITHUB_WORKSPACE/Config_IPQ60XX-WIFI-YES_immortalwrt.git-main_24.12.12_04.25.49.txt .config
+
       - name: Update Feeds
         run: |
           cd ./wrt/
