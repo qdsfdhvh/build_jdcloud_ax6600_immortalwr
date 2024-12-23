@@ -27,10 +27,6 @@ if [ ! -d "wrt/" ]; then
 fi
 cd wrt/
 
-# 复制配置文件
-# cp -f $ROOT_DIR/ax6600.config .config
-cp -f "$ROOT_DIR/Config_IPQ60XX-WIFI-YES_immortalwrt.git-main_24.12.12_04.25.49.txt" .config
-
 # 更新并安装 feeds
 ./scripts/feeds update -a
 ./scripts/feeds install -a
@@ -40,6 +36,10 @@ cd package/
 $ROOT_DIR/Scripts/Packages.sh
 $ROOT_DIR/Scripts/Handles.sh
 cd ..
+
+# 复制配置文件
+cp -f $ROOT_DIR/ax6600.config .config
+make defconfig -j$(nproc)
 
 # 下载和编译
 make download -j$(nproc) 2>&1 | tee "$LOG_FILE"
