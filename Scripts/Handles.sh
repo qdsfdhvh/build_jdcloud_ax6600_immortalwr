@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PKG_PATCH="$GITHUB_WORKSPACE/wrt/package/"
+PKG_PATCH="$ROOT_DIR/wrt/package/"
 
 #预置HomeProxy数据
 if [ -d *"homeproxy"* ]; then

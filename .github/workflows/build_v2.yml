@@ -82,55 +82,55 @@ jobs:
           echo "WRT_VER=$WRT_VER" >> $GITHUB_ENV
           echo "WRT_TYPE=$WRT_TYPE" >> $GITHUB_ENV
 
-      # - name: Build Firmware
-      #   run: sh build.sh
+      - name: Build Firmware
+        run: sh build.sh
 
-      - name: Clone Code
-        run: |
-          git clone --depth=1 --single-branch --branch main https://github.com/VIKINGYFY/immortalwrt ./wrt/
+      # - name: Clone Code
+      #   run: |
+      #     git clone --depth=1 --single-branch --branch main https://github.com/VIKINGYFY/immortalwrt ./wrt/
 
-          cd ./wrt/ && echo "WRT_HASH=$(git log -1 --pretty=format:'%h')" >> $GITHUB_ENV
+      #     cd ./wrt/ && echo "WRT_HASH=$(git log -1 --pretty=format:'%h')" >> $GITHUB_ENV
 
-      - name: Check Scripts
-        run: |
-          find ./ -maxdepth 3 -type f -iregex ".*\(txt\|sh\)$" -exec dos2unix {} \; -exec chmod +x {} \;
+      # - name: Check Scripts
+      #   run: |
+      #     find ./ -maxdepth 3 -type f -iregex ".*\(txt\|sh\)$" -exec dos2unix {} \; -exec chmod +x {} \;
 
-      - name: Update Feeds
-        run: |
-          cd ./wrt/
+      # - name: Update Feeds
+      #   run: |
+      #     cd ./wrt/
 
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
+      #     ./scripts/feeds update -a
+      #     ./scripts/feeds install -a
 
-      - name: Custom Packages
-        run: |
-          cd ./wrt/package/
+      # - name: Custom Packages
+      #   run: |
+      #     cd ./wrt/package/
 
-          $GITHUB_WORKSPACE/Scripts/Packages.sh
-          $GITHUB_WORKSPACE/Scripts/Handles.sh
+      #     $GITHUB_WORKSPACE/Scripts/Packages.sh
+      #     $GITHUB_WORKSPACE/Scripts/Handles.sh
       
-      - name: Copy .config
-        run: |
-          cd ./wrt/
-          cp -f $GITHUB_WORKSPACE/ax6600.config .config
-          make defconfig -j$(nproc)
+      # - name: Copy .config
+      #   run: |
+      #     cd ./wrt/
+      #     cp -f $GITHUB_WORKSPACE/ax6600.config .config
+      #     make defconfig -j$(nproc)
 
-      - name: Download Packages
-        run: |
-          cd ./wrt/
+      # - name: Download Packages
+      #   run: |
+      #     cd ./wrt/
 
-          make download -j$(nproc)
+      #     make download -j$(nproc)
 
-      - name: Compile Firmware
-        run: |
-          cd ./wrt/
+      # - name: Compile Firmware
+      #   run: |
+      #     cd ./wrt/
 
-          make -j$(nproc) V=s
+      #     make -j$(nproc) V=s
 
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
         with:
           name: jdcloud-ax6600-immortalwrt
           path: |
-            wrt/bin/targets/**
+            wrt/bin/targets/**/*.bin
           if-no-files-found: error
