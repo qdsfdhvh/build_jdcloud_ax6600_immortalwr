@@ -98,7 +98,7 @@ jobs:
       - name: Copy .config
         run: |
           cd ./wrt/
-          cp -f $GITHUB_WORKSPACE/Config_IPQ60XX-WIFI-YES_immortalwrt.git-main_24.12.12_04.25.49.txt .config
+          cp -f $GITHUB_WORKSPACE/Config_IPQ60XX-WIFI-YES_immortalwrt.git-main_24.12.23_04.17.18.txt .config
 
       - name: Update Feeds
         run: |
