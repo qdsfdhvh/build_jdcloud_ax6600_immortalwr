@@ -20,20 +20,6 @@ jobs:
       - name: Checkout Projects
         uses: actions/checkout@main
 
-      - name: Check machine configuration
-        run: |
-          echo "--------------------------CPU信息--------------------------"
-          echo "CPU物理数量:$(cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l)"
-          echo -e "CPU核心及版本信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
-          echo "--------------------------内存信息--------------------------"
-          echo "已安装内存详细信息："
-          sudo lshw -short -C memory | grep GiB
-          echo -e "\n"
-          echo "--------------------------硬盘信息--------------------------"
-          echo -e  "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l) \n"
-          echo "硬盘详情："
-          df -Th
-
       - name: Free Disk Space
         uses: endersonmenezes/free-disk-space@main
         with:
@@ -69,63 +55,23 @@ jobs:
           sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
           sudo -E systemctl daemon-reload
           sudo -E timedatectl set-timezone "Asia/Shanghai"
-
-      - name: Initialization Values
+      
+      - name: Check machine configuration
         run: |
-          export WRT_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
-          export WRT_CI=$(basename $GITHUB_WORKSPACE)
-          export WRT_VER=$(echo $WRT_REPO | cut -d '/' -f 5-)-$WRT_BRANCH
-          export WRT_TYPE=$(sed -n "1{s/^#//;s/\r$//;p;q}" $GITHUB_WORKSPACE/Config/$WRT_TARGET.txt)
-
-          echo "WRT_DATE=$WRT_DATE" >> $GITHUB_ENV
-          echo "WRT_CI=$WRT_CI" >> $GITHUB_ENV
-          echo "WRT_VER=$WRT_VER" >> $GITHUB_ENV
-          echo "WRT_TYPE=$WRT_TYPE" >> $GITHUB_ENV
+          echo "--------------------------CPU信息--------------------------"
+          echo "CPU物理数量:$(cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l)"
+          echo -e "CPU核心及版本信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
+          echo "--------------------------内存信息--------------------------"
+          echo "已安装内存详细信息："
+          sudo lshw -short -C memory | grep GiB
+          echo -e "\n"
+          echo "--------------------------硬盘信息--------------------------"
+          echo -e  "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l) \n"
+          echo "硬盘详情："
+          df -Th
 
       - name: Build Firmware
         run: sh build.sh
-
-      # - name: Clone Code
-      #   run: |
-      #     git clone --depth=1 --single-branch --branch main https://github.com/VIKINGYFY/immortalwrt ./wrt/
-
-      #     cd ./wrt/ && echo "WRT_HASH=$(git log -1 --pretty=format:'%h')" >> $GITHUB_ENV
-
-      # - name: Check Scripts
-      #   run: |
-      #     find ./ -maxdepth 3 -type f -iregex ".*\(txt\|sh\)$" -exec dos2unix {} \; -exec chmod +x {} \;
-
-      # - name: Update Feeds
-      #   run: |
-      #     cd ./wrt/
-
-      #     ./scripts/feeds update -a
-      #     ./scripts/feeds install -a
-
-      # - name: Custom Packages
-      #   run: |
-      #     cd ./wrt/package/
-
-      #     $GITHUB_WORKSPACE/Scripts/Packages.sh
-      #     $GITHUB_WORKSPACE/Scripts/Handles.sh
-      
-      # - name: Copy .config
-      #   run: |
-      #     cd ./wrt/
-      #     cp -f $GITHUB_WORKSPACE/ax6600.config .config
-      #     make defconfig -j$(nproc)
-
-      # - name: Download Packages
-      #   run: |
-      #     cd ./wrt/
-
-      #     make download -j$(nproc)
-
-      # - name: Compile Firmware
-      #   run: |
-      #     cd ./wrt/
-
-      #     make -j$(nproc) V=s
 
       - name: Upload Firmware
         uses: actions/upload-artifact@v4
