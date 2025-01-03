@@ -22,7 +22,7 @@ cd ..
 # 复制配置文件
 # cp -f $ROOT_DIR/ax6600.config .config
 cp -f $ROOT_DIR/Config_IPQ60XX-WIFI-YES_immortalwrt.git-main_25.01.02_14.25.59.txt .config
-make defconfig
+make defconfig -j$(nproc)
 
 # 下载和编译
 make download -j$(nproc)
